@@ -36,7 +36,7 @@ FusionEKF::FusionEKF() {
     * Finish initializing the FusionEKF.
     * Set the process and measurement noises
   */
-
+  cout << "setting everything up" << endl;
 
 }
 
@@ -67,11 +67,13 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
       /**
       Convert radar from polar to cartesian coordinates and initialize state.
       */
+      cout << "I am a radar" << endl;
     }
     else if (measurement_pack.sensor_type_ == MeasurementPackage::LASER) {
       /**
       Initialize state.
       */
+      cout << "I am a laser" << endl;
     }
 
     // done initializing, no need to predict or update
@@ -105,8 +107,10 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
 
   if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
     // Radar updates
+    cout << "update radar" << endl;
   } else {
     // Laser updates
+    cout << "update laser" << endl;
   }
 
   // print the output

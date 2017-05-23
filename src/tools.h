@@ -28,6 +28,11 @@ public:
   * A helper method to calculate Jacobians.
   */
   MatrixXd CalculateJacobian(const VectorXd& x_state);
+  
+  /**
+  * A helper method to check divide by zero.
+  */
+  float ZeroCheck(const float &value, const float epsilon = 1.0e-4);
 
 };
 

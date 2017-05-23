@@ -1,4 +1,5 @@
 #include "kalman_filter.h"
+#include <iostream>
 
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
@@ -22,6 +23,7 @@ void KalmanFilter::Predict() {
   TODO:
     * predict the state
   */
+  std::cout << "KF predict" << std::endl;
 }
 
 void KalmanFilter::Update(const VectorXd &z) {
@@ -29,6 +31,8 @@ void KalmanFilter::Update(const VectorXd &z) {
   TODO:
     * update the state by using Kalman Filter equations
   */
+  std::cout << "KF update " << z << std::endl;
+  
 }
 
 void KalmanFilter::UpdateEKF(const VectorXd &z) {
@@ -36,4 +40,5 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   TODO:
     * update the state by using Extended Kalman Filter equations
   */
+  std::cout << "Extended KF update " << z << std::endl;
 }
