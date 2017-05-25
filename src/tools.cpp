@@ -15,6 +15,9 @@ VectorXd Tools::CalculateRMSE(const vector<VectorXd> &estimations,
  * Calculates the Root Mean Square Error of between the the estimated position
  * and the true position.
  * RMSE = sqrt(1/(vector size) * sum(square(estimate-truth)))
+ * @param estimations : predicted position
+ * @param ground_truth : actual measured position
+ * @return : the error between the estimate and ground_truth 
  */
    
   VectorXd rmse(4);
@@ -40,7 +43,7 @@ VectorXd Tools::CalculateRMSE(const vector<VectorXd> &estimations,
   return rmse;
 }
 
-float Tools::ZeroCheck(const float &value, const float epsilon=1.0e-4) {
+float Tools::ZeroCheck(const float &value, const float epsilon) {
   /*
    * Checks to see if a value is near zero.
    * @param value : value to check
@@ -55,9 +58,10 @@ float Tools::ZeroCheck(const float &value, const float epsilon=1.0e-4) {
 }
 
 MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
-  /**
-  TODO:
-    * Calculate a Jacobian here.
+  /*
+   * Calculate the Jacobian for non-linear function.
+   * @param x_state : vector containing position and velocity
+   * @return : jacobian
   */
   MatrixXd Hj(3,4);
   //recover state positions and velocity
@@ -67,9 +71,9 @@ MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
   float vy = x_state(3);
   
   // check the input vectors have elements.
-  if(px == 0 ||py == 0||vx == 0||vy == 0){
-      std::cout << "Error with divide by Zero" << std::endl;
-  }
+  //if(px == 0 ||py == 0||vx == 0||vy == 0){
+  //    std::cout << "Error with divide by Zero" << std::endl;
+  //}
 
   //compute the Jacobian matrix
   float pSquare = Tools::ZeroCheck(px*px + py*py);
