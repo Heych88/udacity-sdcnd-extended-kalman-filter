@@ -44,7 +44,6 @@ FusionEKF::FusionEKF() {
   ekf_.H_ = MatrixXd(2, 4);
   ekf_.H_ << 1, 0, 0, 0,
              0, 1, 0, 0;
-  ekf_.Hj_ = MatrixXd(3, 4);
 
   previous_timestamp_ = 0.0;
 
@@ -56,11 +55,6 @@ FusionEKF::FusionEKF() {
 FusionEKF::~FusionEKF() {}
 
 void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
-
-  if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
-    // Radar updates
-    return;
-  }
     
   short noise_ax = 9;
   short noise_ay = 9;
@@ -106,6 +100,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
       */      
       ekf_.R_ = R_laser_;
       ekf_.Update(measurement_pack.raw_measurements_);
+      cout << "I am the first lidar" << endl;
     }
 
     // done initializing, no need to predict or update
@@ -140,11 +135,6 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
              0, dt_4_4 * noise_ay, 0, dt_3_2 * noise_ay,
              dt_3_2 * noise_ax, 0, dt_2 * noise_ax, 0,
              0, dt_3_2 * noise_ay, 0, dt_2 * noise_ay;
-
-  //cout << "Q_ " << ekf_.Q_ << endl;
-  //cout << "F_ " <<  ekf_.F_ << endl;
-  //cout << "H_ " << ekf_.H_ << endl;
-  //cout << "R_ " << ekf_.R_ << endl;
   
   ekf_.Predict();
 
@@ -160,12 +150,12 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
 
   if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
     // Radar updates
-    //cout << "update radar" << endl;
+    cout << "I am radar" << endl;
+    ekf_.R_ = R_radar_;
+    ekf_.UpdateEKF(measurement_pack.raw_measurements_);
   } else {
     // Laser updates
-    //cout << "update laser" << endl;
     ekf_.R_ = R_laser_;
-    cout << "measurement_pack.raw_measurements_ " << measurement_pack.raw_measurements_ << endl;
     ekf_.Update(measurement_pack.raw_measurements_);
     
   }

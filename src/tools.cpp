@@ -63,17 +63,11 @@ MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
    * @param x_state : vector containing position and velocity
    * @return : jacobian
   */
-  MatrixXd Hj(3,4);
   //recover state positions and velocity
   float px = x_state(0);
   float py = x_state(1);
   float vx = x_state(2);
   float vy = x_state(3);
-  
-  // check the input vectors have elements.
-  //if(px == 0 ||py == 0||vx == 0||vy == 0){
-  //    std::cout << "Error with divide by Zero" << std::endl;
-  //}
 
   //compute the Jacobian matrix
   float pSquare = Tools::ZeroCheck(px*px + py*py);
@@ -82,6 +76,7 @@ MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
   float pvDiff1 = vx*py - vy*px;
   float pvDiff2 = vy*px - vx*py;
 
+  MatrixXd Hj = MatrixXd(3,4);
   Hj << px/pSquareRoot, py/pSquareRoot, 0, 0,
        -py/pSquare, px/pSquare, 0, 0,
        (py*pvDiff1)/pSquareCube, (py*pvDiff2)/pSquareCube, px/pSquareRoot, py/pSquareRoot;
