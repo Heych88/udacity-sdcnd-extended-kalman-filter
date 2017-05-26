@@ -20,19 +20,11 @@ void KalmanFilter::Init(VectorXd &x_in, MatrixXd &P_in, MatrixXd &F_in,
 }
 
 void KalmanFilter::Predict() {
-  /**
-  TODO:
-    * predict the state
-  */
   x_ = F_ * x_; // predict the new mean
   P_ = F_ * P_ * F_.transpose() + Q_ ; // predict new covariance  
 }
 
 void KalmanFilter::Update(const VectorXd &z) {
-  /**
-  TODO:
-    * update the state by using Kalman Filter equations
-  */
   VectorXd y = z - (H_ * x_);
   MatrixXd Ht = H_.transpose();
   MatrixXd S = H_ * P_ * Ht + R_;
@@ -46,10 +38,6 @@ void KalmanFilter::Update(const VectorXd &z) {
 }
 
 void KalmanFilter::UpdateEKF(const VectorXd &z) {
-  /**
-  TODO:
-    * update the state by using Extended Kalman Filter equations
-  */
   float px = x_[0];
   float py = x_[1];
   float vx = x_[2];
@@ -58,6 +46,16 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   float range_dash = sqrt(px * px + py * py); // convert prediction position to a range
   float angle_dash = atan2(py, px); // convert prediction to an angle
   float velocity_dash = (px * vx + py * vy) / range_dash; // convert prediction to a velocity
+  
+  const float PI = 3.14159265;
+  // Make sure that the angle is between PI and -PI
+  while((angle_dash > PI) || (angle_dash < -PI)){
+    if(angle_dash > PI){
+      angle_dash -= 2 * PI;
+    } else {
+      angle_dash += 2 * PI;
+    }
+  }
 
   VectorXd hx_dash = VectorXd(3);
   hx_dash << range_dash, angle_dash, velocity_dash;
