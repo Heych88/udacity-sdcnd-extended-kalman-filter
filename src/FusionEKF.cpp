@@ -58,9 +58,6 @@ FusionEKF::~FusionEKF() {}
 // Input 
 // MeasurementPackage -> the measurement devices class with the new updated data 
 void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
-    
-  short noise_ax = 9; // prediction noise in the x plane
-  short noise_ay = 9;
 
   /*****************************************************************************
    *  Initialization
@@ -111,6 +108,8 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
   ekf_.F_(0, 2) = dt;
   ekf_.F_(1, 3) = dt;
   
+  short noise_ax = 9; // prediction noise in the x plane
+  short noise_ay = 9;
   float dt_2 = dt * dt;
   float dt_4_4 = (dt_2 * dt_2) / 4; 
   float dt_3_2 = (dt_2 * dt) / 2;
