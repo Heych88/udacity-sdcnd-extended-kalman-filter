@@ -78,7 +78,6 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   MatrixXd Hjt = Hj_.transpose();
   MatrixXd S = Hj_ * P_ * Hjt + R_;
   MatrixXd K = (P_ * Hjt) * S.inverse();
-  cout << "K " << K << endl;
   
   // Update the prediction with the measured data
   x_ = x_ + K * y; // update the state/position matrix
