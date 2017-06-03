@@ -29,12 +29,17 @@ FusionEKF::FusionEKF() {
         0, 0.0009, 0,
         0, 0, 0.09;
 
+  // x_ mean variance mapping array for prediction 
   ekf_.F_ = MatrixXd(4, 4);
   ekf_.F_ << 1, 0, 1, 0,
              0, 1, 0, 1,
              0, 0, 1, 0,
              0, 0, 0, 1;
+  
+  // create the prediction covariance matrix
   ekf_.Q_ = MatrixXd(4,4);
+  
+  // setup the laser data mapping matrix
   ekf_.H_ = MatrixXd(2, 4);
   ekf_.H_ << 1, 0, 0, 0,
              0, 1, 0, 0;
@@ -47,9 +52,14 @@ FusionEKF::FusionEKF() {
 */
 FusionEKF::~FusionEKF() {}
 
+// Updates the kalman filter of tracked objects position, based of the 
+// measurement device.
+//
+// Input 
+// MeasurementPackage -> the measurement devices class with the new updated data 
 void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     
-  short noise_ax = 9;
+  short noise_ax = 9; // prediction noise in the x plane
   short noise_ay = 9;
 
   /*****************************************************************************
@@ -69,17 +79,13 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
              0, 0, 0, 1000; 
 
     if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
-      /**
-      Convert radar from polar to cartesian coordinates and initialize state.
-      */
+      // Convert radar from polar to cartesian coordinates and initialize state.
       ekf_.x_ << 1, 1, 0, 0;
       ekf_.R_ = R_radar_;
       ekf_.UpdateEKF(measurement_pack.raw_measurements_);
     }
     else if (measurement_pack.sensor_type_ == MeasurementPackage::LASER) {
-      /**
-      Initialize state.
-      */      
+      //Initialize state.  
       ekf_.x_ << measurement_pack.raw_measurements_[0], 
                measurement_pack.raw_measurements_[1],
                0,
@@ -96,6 +102,8 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
   /*****************************************************************************
    *  Prediction
    ****************************************************************************/
+  // Predict the mean (x_) and covariance (P_) / position and velocity of the 
+  // tracked object at the current time step.
   // dt - expressed in seconds
   float dt = (measurement_pack.timestamp_ - previous_timestamp_) / 1000000.0; 
   previous_timestamp_ = measurement_pack.timestamp_;
@@ -117,13 +125,16 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
   /*****************************************************************************
    *  Update
    ****************************************************************************/
+  // Update the predicted position with the measured sensor data
   if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
     // Radar updates
     ekf_.R_ = R_radar_;
+    // Use the extended kalman filter on non-cartesian measured data
     ekf_.UpdateEKF(measurement_pack.raw_measurements_);
   } else {
     // Laser updates
     ekf_.R_ = R_laser_;
+    // Use normal kalman filter on measured data of the same coordinates system
     ekf_.Update(measurement_pack.raw_measurements_);
   }
 
