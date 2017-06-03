@@ -32,7 +32,7 @@ public:
   /**
   * A helper method to check divide by zero.
   */
-  float ZeroCheck(const float &value, const float epsilon = 1.0e-4);
+  double ZeroCheck(const double &value, const double epsilon = 1.0e-4);
 
 };
 

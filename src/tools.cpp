@@ -43,14 +43,14 @@ VectorXd Tools::CalculateRMSE(const vector<VectorXd> &estimations,
   return rmse;
 }
 
-float Tools::ZeroCheck(const float &value, const float epsilon) {
+double Tools::ZeroCheck(const double &value, const double epsilon) {
   /*
    * Checks to see if a value is near zero.
    * @param value : value to check
    * @param epsilon : near zero value to compare input against
    * @return : value if not between +/- epsilon else epsilon
    */
-  if(value < epsilon && -value > -epsilon){
+  if(value < epsilon){ 
     return epsilon;
   }else{
     return value;
@@ -64,21 +64,21 @@ MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
    * @return : jacobian
   */
   //recover state positions and velocity
-  float px = x_state(0);
-  float py = x_state(1);
-  float vx = x_state(2);
-  float vy = x_state(3);
+  double px = x_state(0);
+  double py = x_state(1);
+  double vx = x_state(2);
+  double vy = x_state(3);
 
   //compute the Jacobian matrix
-  float pSquare = Tools::ZeroCheck(px*px + py*py);
-  float pSquareRoot =  Tools::ZeroCheck(sqrt(pSquare));
-  float pSquareCube =  Tools::ZeroCheck(sqrt(pSquare*pSquare*pSquare));
-  float pvDiff1 = vx*py - vy*px;
-  float pvDiff2 = vy*px - vx*py;
+  double pSquareSum = Tools::ZeroCheck(px*px + py*py);
+  double pSquareRoot =  Tools::ZeroCheck(sqrt(pSquareSum));
+  double pSquareCube =  Tools::ZeroCheck(sqrt(pSquareSum*pSquareSum*pSquareSum));
+  double pvDiff1 = vx*py - vy*px;
+  double pvDiff2 = vy*px - vx*py;
 
   MatrixXd Hj = MatrixXd(3,4);
   Hj << px/pSquareRoot, py/pSquareRoot, 0, 0,
-       -py/pSquare, px/pSquare, 0, 0,
+       -1.*py/pSquareSum, px/pSquareSum, 0, 0,
        (py*pvDiff1)/pSquareCube, (py*pvDiff2)/pSquareCube, px/pSquareRoot, py/pSquareRoot;
 
   return Hj;
