@@ -9,17 +9,15 @@ Tools::Tools() {}
 
 Tools::~Tools() {}
 
+// Calculates the Root Mean Square Error of between the the estimated position
+// and the true position.
+// RMSE = sqrt(1/(vector size) * sum(square(estimate-truth)))
+// @param estimations : predicted position
+// @param ground_truth : actual measured position
+// @return : the error between the estimate and ground_truth 
 VectorXd Tools::CalculateRMSE(const vector<VectorXd> &estimations,
                               const vector<VectorXd> &ground_truth) {
-/*
- * Calculates the Root Mean Square Error of between the the estimated position
- * and the true position.
- * RMSE = sqrt(1/(vector size) * sum(square(estimate-truth)))
- * @param estimations : predicted position
- * @param ground_truth : actual measured position
- * @return : the error between the estimate and ground_truth 
- */
-   
+
   VectorXd rmse(4);
   rmse << 0,0,0,0;
 
@@ -43,13 +41,12 @@ VectorXd Tools::CalculateRMSE(const vector<VectorXd> &estimations,
   return rmse;
 }
 
+// Checks to see if a value is near zero.
+// @param value : value to check
+// @param epsilon : near zero value to compare input against
+// @return : value if not between +/- epsilon else epsilon
 double Tools::ZeroCheck(const double &value, const double epsilon) {
-  /*
-   * Checks to see if a value is near zero.
-   * @param value : value to check
-   * @param epsilon : near zero value to compare input against
-   * @return : value if not between +/- epsilon else epsilon
-   */
+ 
   if(value < epsilon){ 
     return epsilon;
   }else{
@@ -57,12 +54,11 @@ double Tools::ZeroCheck(const double &value, const double epsilon) {
   }
 }
 
+// Calculate the Jacobian for non-linear function.
+// @param x_state : vector containing position and velocity
+// @return : jacobian
 MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
-  /*
-   * Calculate the Jacobian for non-linear function.
-   * @param x_state : vector containing position and velocity
-   * @return : jacobian
-  */
+
   //recover state positions and velocity
   double px = x_state(0);
   double py = x_state(1);
