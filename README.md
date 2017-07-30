@@ -1,6 +1,6 @@
 # Extended Kalman Filter Project
 
-This code utilize a kalman filter to estimate the state of a moving object of interest with noisy lidar and radar measurements. 
+This code utilize a kalman filter to estimate the state of a moving object of interest with noisy lidar and radar measurements. A video of the filter in action can be found [here](https://youtu.be/odk7Qb66EU8).
 
 This project involves the Udacity Term 2 Simulator which can be downloaded [here](https://github.com/udacity/self-driving-car-sim/releases/tag/v1.0)
 
@@ -37,8 +37,6 @@ For Mac
 sh install-mac.sh
 `
 
-3. ./ExtendedKF
-
 
 If the above fails, install intall [uWebSocketIO](https://github.com/uWebSockets/uWebSockets) seperatly, then build and ran by doing the following from the project top directory.
 
@@ -46,4 +44,16 @@ If the above fails, install intall [uWebSocketIO](https://github.com/uWebSockets
 2. cd build
 3. cmake ..
 4. make
-5. ./ExtendedKF
+
+## Running in the Simulator
+
+The following assumes the **Build Instructions** was followed and produced no errors.
+
+Download and extract the [simulator](https://github.com/udacity/self-driving-car-sim/releases/tag/v1.0).
+
+1. Navigate to the extrated simulator directory and run the simulator.
+2. Select the settings best for your computer and click **ok**.
+3. In a terminal window run the ExtendedKF executable
+```
+./ExtendedKF
+```
